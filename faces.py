@@ -7,7 +7,7 @@ import cv2 as vision
 
 
 videoCapture = vision.VideoCapture("test3.MP4")
-face_cascade = vision.CascadeClassifier("cascades/face.xml")
+face_cascade = vision.CascadeClassifier("face.xml")
 
 while(True):
     ret, frame = videoCapture.read()
