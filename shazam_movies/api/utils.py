@@ -8,7 +8,7 @@ import cv2 as vision
 from django.conf import settings
 
 CLASSIFIER = "face.xml"
-DEFAULT_WATCH_TIME = 90
+DEFAULT_WATCH_TIME = 300
 CELEBRITY_URL = "https://starbyface.com/Home/LooksLikeByPhoto"
 faceClassifier = vision.CascadeClassifier(os.path.join(settings.BASE_DIR, f"static/cascades/{CLASSIFIER}"))
 ACTORS_FOUND = {}
@@ -27,10 +27,10 @@ def ReadVideo():
         resized = vision.resize(currentFrame, dim, interpolation = vision.INTER_AREA)
         grayCapture = vision.cvtColor(resized, vision.COLOR_BGR2GRAY)
         # allows for face detection
-        faces = faceClassifier.detectMultiScale(grayCapture, scaleFactor=1.4, minNeighbors=5)
+        faces = faceClassifier.detectMultiScale(grayCapture, scaleFactor=1.1, minNeighbors=5)
         for x, y, w, h in faces:
             # vision.rectangle(currentFrame, (x-5, y-5), (x + w, y + h), (0, 255, 0), 3)
-            vision.imwrite(os.path.join(settings.BASE_DIR, "static/actors.png"), resized[y:y+h, x:x+w])
+            vision.imwrite(os.path.join(settings.BASE_DIR, "static/actors.png"), currentFrame)
             identifyFace()
         
 
