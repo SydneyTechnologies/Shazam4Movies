@@ -54,10 +54,13 @@ def identifyFaces():
         result_div = soup.find_all("div", {"class":"text-center", "id":"result"})[0]
         print(result_div)
         if response.status_code == 200:
-            result = soup.find("div", {"class": "realCandidate"})
-            if result != None:
-                similarity = result.find(attrs= {"class" :"progress-bar"})['similarity']
-                actor = result.find("p").text
-                if not ACTORS_FOUND.__contains__(actor):
-                    print(f"{actor}: {similarity}")
-                    ACTORS_FOUND[actor] = similarity
+            male = soup.find(id="male-celebs-result")
+            female = soup.find(id="female-celebs-result")
+            mCandidate = male.find("div", attrs={"class":"progress-bar"})
+            fCandidate = female.find("div", attrs={"class":"progress-bar"})
+            mPercentage = mCandidate.text.replace("\r", "").replace("\n", "").replace("%", "")
+            fPercentage = fCandidate.text.replace("\r", "").replace("\n", "").replace("%", "")
+            if int(mPercentage) > int(fPercentage):
+                ACTORS_FOUND[f"{male.div['name']}"] = int(mPercentage)
+            else:
+                ACTORS_FOUND[f"{female.div['name']}"] = int(fPercentage)
