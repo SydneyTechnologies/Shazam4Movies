@@ -15,5 +15,7 @@ if response.status_code == 200:
     fCandidate = female.find("div", attrs={"class":"progress-bar"})
     mPercentage = mCandidate.text.replace("\r", "").replace("\n", "").replace("%", "")
     fPercentage = fCandidate.text.replace("\r", "").replace("\n", "").replace("%", "")
-    print(f"{male.div['name']}:{int(mPercentage)}")
-    print(f"{female.div['name']}:{int(fPercentage)}")
+    if int(mPercentage) > int(fPercentage):
+        print(f"{male.div['name']}:{int(mPercentage)}")
+    else:
+        print(f"{female.div['name']}:{int(fPercentage)}")
