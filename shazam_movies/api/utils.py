@@ -15,7 +15,7 @@ faceClassifier = vision.CascadeClassifier(os.path.join(settings.BASE_DIR, f"stat
 FRAMES = []
 ACTORS_FOUND = {}
 def ReadVideo():
-    video = os.path.join(settings.BASE_DIR, "static/test3.MP4")
+    video = os.path.join(settings.BASE_DIR, "static/test2.MP4")
     # limit the watch time of the function 
     deadline = time.time() + DEFAULT_WATCH_TIME
     # we first create a capture instance which will read(watch) our video 
@@ -28,12 +28,12 @@ def ReadVideo():
             count += 1
             open, currentFrame = captureInstance.read()
             if open:
-                if count % 500 == 0:
+                if count % 200 == 0:
                     vision.imwrite(os.path.join(settings.BASE_DIR, f"static/actors/{count}.png"), currentFrame)
                     FRAMES.append(f"static/actors/{count}.png")
                 if vision.waitKey(1) & 0xFF == ord("q"):
                     break
-                if count > 1500:
+                if count > 2000:
                     break
             else:
                 break
@@ -46,13 +46,10 @@ def ReadVideo():
 def identifyFaces():
     # upload images using pythons request library
     for frame in FRAMES:
-        print(frame)
         files = {'imageUploadForm': open(os.path.join(settings.BASE_DIR, frame),'rb')}
         response= requests.post(CELEBRITY_URL, files=files)
         soup = BeautifulSoup(response.content, 'html.parser')
 
-        result_div = soup.find_all("div", {"class":"text-center", "id":"result"})[0]
-        print(result_div)
         if response.status_code == 200:
             male = soup.find(id="male-celebs-result")
             female = soup.find(id="female-celebs-result")
